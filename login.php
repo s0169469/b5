@@ -68,7 +68,7 @@ else {
       $chk->bindParam(1,$login);
       $chk->execute();
       $username=$chk->fetchALL();
-	  print($username[0]['pass']);
+      print($username[0]['pass']);
       if(password_verify($pswrd,$username[0]['pass'])){
         $uid=$username[0]['id'];
         $error=FALSE;
