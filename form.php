@@ -1,174 +1,114 @@
-<html>
-  <head>
-    <style>
-    /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
-    .error {
-      border: 2px solid red;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+<div id = "form" style="max-width:800px;  background-color:rgb(230, 141, 206);  margin:auto; margin-bottom:5px; margin-top:5px; padding:10px;">
+  <h2>HTML form</h2>
+  <?php
+    if (!empty($messages)) {
+      print('<div id="messages">');
+      // Выводим все сообщения.
+      foreach ($messages as $message) {
+        print($message);
+      }
+      print('</div>');
     }
 
-    td{
-      margin: 10px;
-      border: 2px solid black;
-    }
-    </style>
-  </head>
-  <body>
+    // Далее выводим форму отмечая элементы с ошибками классом error
+    // и задавая начальные значения элементов ранее сохраненными.
+    //print_r($values);
+  ?>
+  <form action=""
+    method="POST">
 
-<?php
+    <label>
+      1. Your name:<br />
+      <input name="fio"
+        placeholder="Ivan Ivanov" 
+        <?php print($errors['fio'] ? 'class="error"' : '');?> value="<?php print $values['fio'];?>"/>
+    </label><br />
 
-  include_once 'includes.php';
+    <label >
+      2. Your email:<br />
+      <input name="email"
+        type="email"
+        placeholder="user@example.com" 
+        <?php print($errors['email'] ? 'class="error"' : '');?> value="<?php print $values['email'];?>"/>
+    </label><br />
 
-  if (!empty($messages)) {
-    print('<div id="messages">');
-    // Выводим все сообщения.
-    foreach ($messages as $message) {
-      print($message.'<br>');
-    }
-    print('</div>');
-  }
+    <label>
+      3. Date of birth:<br />
+      <select name="year">
+        <?php 
+        for ($i = 1922; $i <= 2022; $i++) {
+          $selected= ($i == $values['year']) ? 'selected="selected"' : '';
+          printf('<option value="%d" %s>%d год</option>', $i, $selected, $i);
+        }
+        ?>
+      </select><br />
 
-  print '<br>';
-
-  if (isset($_SESSION['is_error'])){
-    if ($_SESSION['is_error'] == 1){
-      print ("<div class='error'>");
-      print ($_SESSION['error_message']);
-      print ("</div>");
-    }
-  }
-
-  print '<br>';
-
-// Далее выводим форму отмечая элементы с ошибками классом error
-// и задавая начальные значения элементов ранее сохраненными.
-?>
-
-<form action="" method="POST">
-              <label >
-                Имя:<br>
-                <input 
-                  <?php if ($errors['full_name']) {print 'class="error"';} ?>
-                  name="full_name"
-                  value="<?php print $values['full_name']; ?>"
-                  placeholder="Имя" required>
-              </label><br>
+      4. Your civility:<br/>
+    <label><input type="radio" checked="checked"
+      name="gender" value="m" 
+      <?php print($errors['gender'] ? 'class="error"' : '');?>
+      <?php if ($values['gender']=='m') print 'checked';?>
+      />
+      male</label>
+    <label><input type="radio"
+      name="gender" value="f" 
+      <?php print($errors['gender'] ? 'class="error"' : '');?>
+      <?php if ($values['gender']=='f') print 'checked';?>
+      />
+      female</label><br />
+      5. Number of limbs:<br/>
+    <label><input type="radio" name="bodyparts" value="2" 
+      <?php print($errors['bodyparts'] ? 'class="error"' : '');?>
+      <?php if ($values['bodyparts']=='2') print 'checked';?>
+    />
+      2</label>
+    <label><input type="radio" name="bodyparts" value="3" 
+      <?php print($errors['bodyparts'] ? 'class="error"' : '');?>
+      <?php if ($values['bodyparts']=='3') print 'checked';?>
+    />
+      3</label><br />
+    <label><input type="radio" name="bodyparts" value="4" 
+      <?php print($errors['bodyparts'] ? 'class="error"' : '');?>
+      <?php if ($values['bodyparts']=='4') print 'checked';?>
+    />
+      4</label><br />
+    <label><input type="radio" name="bodyparts" value="cannot count" 
+      <?php print($errors['bodyparts'] ? 'class="error"' : '');?>
+      <?php if ($values['bodyparts']=='cannot count') print 'checked';?>
+    />
+      cannot count</label><br />
+      </label>
+      6. Your superpower (pick one or more):
+      <br />
+      <select name="ability[]"
+          multiple="multiple" <?php print($errors['ability'] ? 'class="error"' : '');?>>
+          <option value="1" <?php print(in_array('1', $values['ability']) ? 'selected ="selected"' : '');?>>none</option>
+          <option value="2" <?php print(in_array('2', $values['ability']) ? 'selected ="selected"' : '');?>>immortality</option>
+          <option value="3" <?php print(in_array('3', $values['ability']) ? 'selected ="selected"' : '');?>>invisibility</option>
+          <option value="4" <?php print(in_array('4', $values['ability']) ? 'selected ="selected"' : '');?>>levitation</option>
+      </select>
+      </label><br />
+      <label>
+      7. Your biography:<br />
+        <textarea name="bio" placeholder="your text..."
+        <?php print($errors['bio'] ? 'class="error"' : '');?>
+        value = "<?php print $values['bio'];?>"
+        ></textarea>
+        </label><br />
         
-              <label>
-                E-mail:<br>
-                <input 
-                  <?php if ($errors['email']) {print 'class="error"';} ?>
-                  name="email"
-                  type="email"
-                  value="<?php print $values['email']; ?>"
-                  placeholder="e-mail" required>
-              </label><br>
-        
-              <label>
-                Год рождения:<br>
-                <select 
-                  <?php if ($errors['birth_year']) {print 'class="error"';} ?>
-                  name="birth_year">
-                    <?php 
-                      for ($i = 1923; $i <= 2023; $i++) {
-                        if ($values['birth_year'] == $i)
-                          printf('<option value="%d" selected="selected">%d год</option>', $i, $i);
-                        else
-                          printf('<option value="%d">%d год</option>', $i, $i);
-                      }
-                    ?>
-                  </select>
-              </label><br>
-              
-              <div <?php if ($errors['is_male']) {print 'class="error"';} ?>>
-                Пол: <br>
-                <label><input type="radio"
-                  name="is_male" value="1" <?php if ($values['is_male'] == 1) print "checked"; ?> required>
-                  Мужской</label>
-                <label><input type="radio"
-                  name="is_male" value="0" <?php if ($values['is_male'] == 0) print "checked"; ?> required>
-                  Женский</label><br>
-              </div>
+      8.<label><input type="checkbox" checked="checked"
+        name="check" />
+        read and understood</label>
 
-              <div <?php if ($errors['limbs_amount']) {print 'class="error"';} ?>>
-                Количество конечностей: <br>
-
-                <?php 
-                  for ($i = 1; $i <= 4; $i++) {
-                    if ($i == $values['limbs_amount'])
-                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'.' required checked>'.$i.'</label>';
-                    else
-                      print '<label><input type="radio" name="limbs_amount" value="'.$i.'"'.' required>'.$i.'</label>';
-                  }
-                ?>
-              </div>
-
-
-            <label>
-                Суперсилы:
-                <br>
-                <select
-                  <?php if ($errors['powers']) {print 'class="error"';} ?>
-                  name="powers[]"
-                  multiple="multiple">
-                  <?php
-                    try {
-                      foreach ($db->query("SELECT * FROM Ability;") as $row){
-                        if (isset($values['powers'])){
-                          if (in_array($row['id'], $values['powers'])) // if contains - then selected
-                            print '<option value="'.intval($row['id']).'" selected>'.$row['_name'].'</option>';
-                          else
-                            print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
-                        } else {
-                          print '<option value="'.intval($row['id']).'">'.$row['_name'].'</option>';
-                        }
-                      }
-                    } catch(PDOException $e){
-                      send_error_and_exit("Db connection error", "500");
-                    }
-                  ?>
-                </select>
-              </label><br>
-        
-              <label >
-                Биография:
-                <br>
-                <textarea 
-                  <?php if ($errors['biography']) {print 'class="error"';} ?>
-                  name="biography"><?php print trim($values['biography']) ?></textarea>
-              </label><br>
-
-
-
-              <?php
-                if (!$is_changing_data) {
-              ?>
-                    Согласие c лицензионным соглашением:<br>
-                    <label><input type="checkbox"
-                      name="check" required>
-                      Да</label><br>
-              <?php
-                }
-              ?>
-
-              <input type="submit" value="Отправить">
-            </form>
-
-            <table>
-            <?php
-                   try {
-                      foreach ($db->query("SELECT * FROM Person;") as $person){
-                        $abilities = '';
-                        foreach ($db->query('SELECT * FROM Person_Ability WHERE person_id='.intval($person['id']).';') as $pa){
-                          foreach ($db->query('SELECT _name FROM Ability WHERE id='.intval($pa['ability_id']).';') as $a){
-                            $abilities = $abilities.$a['_name'].', ';
-                          }
-                        }
-                        print '<tr><td>'.$person['full_name'].'</td><td>'.$person['email'].'</td><td>'.$person['birth_year'].'</td><td>'.$person['is_male'].'</td><td>'.$person['limbs_amount'].'</td><td>'.$person['biography'].'</td><td>'.$abilities.'</td></tr>';
-                      }
-                    } catch(PDOException $e){
-                      send_error_and_exit("Db connection error", "500");
-                    }
-             ?>
-            </table>
-  </body>
-</html>
+      <input type="submit" value="Send" />
+    </form>
+  </div>
+</body>
