@@ -59,16 +59,16 @@ else {
   $pswrd=$_POST['pass'];
   $uid=0;
   $error=TRUE;
-  $user = 'u51489';
-  $pass = '7565858';
-  $db1 = new PDO('mysql:host=localhost;dbname=u51489', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+  $user = 'u52991';
+  $pass = '4039190';
+  $db1 = new PDO('mysql:host=localhost;dbname=u52991', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
   if(!empty($login) and !empty($pswrd)){
     try{
       $chk=$db1->prepare("SELECT * FROM user WHERE login=?");
       $chk->bindParam(1,$login);
       $chk->execute();
       $username=$chk->fetchALL();
-      print($username[0]['pass']);
+	  print($username[0]['pass']);
       if(password_verify($pswrd,$username[0]['pass'])){
         $uid=$username[0]['id'];
         $error=FALSE;
