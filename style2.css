@@ -1,0 +1,24 @@
+#form {
+    font-size:25px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style:normal;
+    text-align: center;
+  }
+  h1, h2, h3{
+    text-align: center;
+  }
+  div{
+    align-items: center;
+  }
+  input, select, textarea{
+    font-size:15px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style:normal;
+    background-color: rgb(241, 193, 231);
+    border: 1px solid black;
+  }
+  header {
+    font-size:25px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style:normal;
+  }
